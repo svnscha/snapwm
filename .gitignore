@@ -2,6 +2,15 @@
 *.pdb
 *.lib
 *.exp
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+build
 
 tags
 debug

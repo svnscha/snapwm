@@ -14,10 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+
       - name: Build
-        run: |
-          "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvarsall.bat" amd64 && nmake release
-        shell: cmd
+        run: cmake --build build --config Release
 
       - name: Create Release
         run: gh release create ${{ github.event.inputs.version }} ./release/lightwm.exe ./release/lightwm_dll.dll -n "Version ${{ github.event.inputs.version }}"

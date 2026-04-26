@@ -14,7 +14,7 @@ Video in which I make the PoC of this project: https://youtu.be/cuPirXZ6AWo
 
 After building, run the executable ```lightwm.exe``` which will reside in the release and/or debug folder, depending on what you built.
 
-Upon running, it will immediately tile all the non-minimized windows on your screen. The program will run in the background.
+Upon running, it will immediately tile all the non-minimized windows on your screen. The focused window is centered at 60% of the monitor width, and the remaining windows are tiled evenly on the left and right sides. The program will run in the background.
 
 If you want to configure it to run when you login, you can use the `Run` utility and type `shell:startup`, then create a LightWM shortcut in that folder.
 
@@ -24,20 +24,26 @@ If you want to configure it to run when you login, you can use the `Run` utility
 - ```alt+j``` - focus on next window
 - ```alt+k``` - focus on previous window
 - ```alt+f``` - toggle fullscreen mode (disables tiling and puts the focused window in fullscreen, pressing ```alt+f``` again will enable tiling again and tile all non-minimized windows)
-- ```alt+1``` up until ```alt+9``` - go to workspace number ```1``` until ```9``` respectively
-- You can move the current focused window to a different workspace number by adding ```shift``` to the above command.
-- You can "force" retile by using ```alt+t```, you can use this as a trick to send the current focused window to the left.
-- `alt+\` toggles whether the automatic tiling is enabled/disabled. This is useful if you also use programs which don't play well with LightWM automatic tiling
+- You can "force" retile by using ```alt+t```. This centers the currently focused window.
+- You can force retile including minimized windows by using ```alt+shift+t```.
+- ```alt+p``` toggles whether the automatic tiling is enabled/disabled. This is useful if you also use programs which don't play well with LightWM automatic tiling
+
+LightWM also adds a system tray icon. Right-click it to access the same actions from a menu, including tiling, focus navigation, fullscreen, toggling automatic tiling, and exiting.
 
 ## Building
 
-You can build using the "x64 Native Tools Command Prompt for VS 2022" that comes with Microsoft Visual Studio Build Tools:
+This project now uses CMake.
 
-In the console you can run nmake to build according to the Makefile
+You can build it from the "x64 Native Tools Command Prompt for VS 2022" that comes with Microsoft Visual Studio Build Tools:
 
-```nmake```
+```powershell
+cmake -S . -B build -G "Visual Studio 17 2022" -A x64
+cmake --build build --config Release
+```
 
-I haven't tried building with a different VS version or building x86, but that may work as well.
+For a debug build, replace `Release` with `Debug`.
+
+The resulting `lightwm.exe` and `lightwm_dll.dll` are written to the `release` or `debug` folder, depending on the selected configuration.
 
 ## Contributing
 

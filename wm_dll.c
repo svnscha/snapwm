@@ -9,21 +9,25 @@
 
 DWORD lightwmMainThreadId = 0;
 
-__declspec(dllexport) LRESULT CALLBACK ShellProc(int code, WPARAM wparam, LPARAM lparam) {
-	if (code == HSHELL_WINDOWCREATED || code == HSHELL_WINDOWDESTROYED) {
+__declspec(dllexport) LRESULT CALLBACK ShellProc(int code, WPARAM wparam, LPARAM lparam)
+{
+	if (code == HSHELL_WINDOWCREATED || code == HSHELL_WINDOWDESTROYED)
+	{
 		PostThreadMessageW(lightwmMainThreadId, LWM_WINDOW_EVENT, 0, 0);
 	}
 
 	return CallNextHookEx(NULL, code, wparam, lparam);
 }
 
-BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ulReasonForCall, LPVOID lpReserved) 
+BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 {
-	if (ulReasonForCall == DLL_PROCESS_ATTACH) { 
-		if (!retrieveDwordFromSharedMemory(&lightwmMainThreadId)) {
+	if (ulReasonForCall == DLL_PROCESS_ATTACH)
+	{
+		if (!retrieveDwordFromSharedMemory(&lightwmMainThreadId))
+		{
 			reportGeneralError(L"Error retrieving the thread id from shared memory");
 		}
 	}
 
-	return TRUE; 
+	return TRUE;
 }
