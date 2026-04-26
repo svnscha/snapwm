@@ -1,0 +1,22 @@
+* text=auto eol=lf
+
+*.c text eol=lf
+*.h text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+*.exe binary
+*.dll binary
+*.pdb binary
+*.ilk binary
+*.lib binary
+*.exp binary
+*.obj binary
+*.res binary
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary

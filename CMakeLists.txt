@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(LightWM LANGUAGES C)
+project(SnapWM LANGUAGES C)
 
 if (NOT WIN32)
-	message(FATAL_ERROR "LightWM can only be built on Windows.")
+	message(FATAL_ERROR "SnapWM can only be built on Windows.")
 endif()
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Supported build types" FORCE)
@@ -13,46 +13,50 @@ if (MSVC)
 	set(CMAKE_C_FLAGS_RELEASE "/Ox /W3" CACHE STRING "Release flags" FORCE)
 endif()
 
-set(lightwmExeSources
-	wm.c
-	tiling.c
-	error.c
-	keyboard.c
-	shared_mem.c
+set(snapwmExeSources
+	src/app/wm.c
+	src/app/tiling.c
+	src/app/keyboard.c
+	src/common/error.c
+	src/common/shared_mem.c
 )
 
-set(lightwmDllSources
-	wm_dll.c
-	error.c
-	shared_mem.c
+set(snapwmDllSources
+	src/dll/wm_dll.c
+	src/common/error.c
+	src/common/shared_mem.c
 )
 
-add_executable(lightwm WIN32 ${lightwmExeSources})
-add_library(lightwm_dll SHARED ${lightwmDllSources})
+add_executable(snapwm WIN32 ${snapwmExeSources})
+add_library(snapwm_dll SHARED ${snapwmDllSources})
 
-target_link_libraries(lightwm PRIVATE dwmapi gdi32 kernel32 shell32 user32)
-target_link_libraries(lightwm_dll PRIVATE kernel32 user32)
+target_include_directories(snapwm PRIVATE src/app src/common)
+target_include_directories(snapwm_dll PRIVATE src/common)
+
+target_link_libraries(snapwm PRIVATE dwmapi gdi32 kernel32 shell32 user32)
+target_link_libraries(snapwm_dll PRIVATE kernel32 user32)
 
 if (MSVC)
-	target_link_options(lightwm PRIVATE
+	target_link_options(snapwm PRIVATE
 		/ENTRY:wWinMain
 		/SUBSYSTEM:WINDOWS
 	)
 
-	target_link_options(lightwm_dll PRIVATE
+	target_link_options(snapwm_dll PRIVATE
 		/ENTRY:DllMain
 		/SUBSYSTEM:WINDOWS
 	)
 endif()
 
-set_target_properties(lightwm PROPERTIES
+set_target_properties(snapwm PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/debug"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/release"
 	PDB_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/debug"
 	PDB_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/release"
 )
 
-set_target_properties(lightwm_dll PROPERTIES
+set_target_properties(snapwm_dll PROPERTIES
+	OUTPUT_NAME snapwm
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/debug"
 	RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/release"
 	ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_SOURCE_DIR}/debug"

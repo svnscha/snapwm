@@ -3,7 +3,8 @@
 
 HANDLE mapHandle = NULL;
 
-bool readOrWriteToSharedMemory(DWORD write, DWORD* read) {
+bool readOrWriteToSharedMemory(DWORD write, DWORD *read)
+{
 	bool succeeded = false;
 
 	mapHandle = CreateFileMappingW(
@@ -12,10 +13,10 @@ bool readOrWriteToSharedMemory(DWORD write, DWORD* read) {
 		PAGE_READWRITE,
 		0,
 		sizeof(DWORD),
-		L"LightWMThreadId"
-	);
+		L"SnapWMThreadId");
 
-	if (mapHandle == NULL) {
+	if (mapHandle == NULL)
+	{
 		reportWin32Error(L"Could not create file mapping object");
 		goto cleanup;
 	}
@@ -25,44 +26,53 @@ bool readOrWriteToSharedMemory(DWORD write, DWORD* read) {
 		FILE_MAP_ALL_ACCESS,
 		0,
 		0,
-		sizeof(DWORD)
-	);
+		sizeof(DWORD));
 
-	if (mapAddress == NULL) {
+	if (mapAddress == NULL)
+	{
 		reportWin32Error(L"Could not map view of file");
 		goto cleanup;
 	}
 
-	if (write) {
-		*(DWORD*)mapAddress = write;
-	} else if (read) {
-		*read = *(DWORD*)mapAddress;
+	if (write)
+	{
+		*(DWORD *)mapAddress = write;
+	}
+	else if (read)
+	{
+		*read = *(DWORD *)mapAddress;
 	}
 
 	succeeded = true;
 
 cleanup:
-	if (mapAddress) {
+	if (mapAddress)
+	{
 		UnmapViewOfFile(mapAddress);
 	}
 
-	if (read) {
+	if (read)
+	{
 		cleanupMemoryMapFile();
 	}
 
 	return succeeded;
 }
 
-void cleanupMemoryMapFile() {
-	if (mapHandle) {
+void cleanupMemoryMapFile()
+{
+	if (mapHandle)
+	{
 		CloseHandle(mapHandle);
 	}
 }
 
-bool retrieveDwordFromSharedMemory(DWORD* output) {
+bool retrieveDwordFromSharedMemory(DWORD *output)
+{
 	return readOrWriteToSharedMemory(0, output);
 }
 
-bool storeDwordInSharedMemory(DWORD input) {
+bool storeDwordInSharedMemory(DWORD input)
+{
 	return readOrWriteToSharedMemory(input, 0);
 }

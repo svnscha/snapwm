@@ -190,14 +190,14 @@ HWND createTrayWindow(HINSTANCE instance)
 	clearMemory(&windowClass, sizeof(windowClass));
 	windowClass.lpfnWndProc = trayWindowProc;
 	windowClass.hInstance = instance;
-	windowClass.lpszClassName = L"LightWMTrayWindow";
+	windowClass.lpszClassName = L"SnapWMTrayWindow";
 
 	if (!RegisterClassW(&windowClass))
 	{
 		return NULL;
 	}
 
-	return CreateWindowExW(0, windowClass.lpszClassName, L"LightWM", WS_OVERLAPPED, 0, 0, 0, 0, NULL, NULL, instance, NULL);
+	return CreateWindowExW(0, windowClass.lpszClassName, L"SnapWM", WS_OVERLAPPED, 0, 0, 0, 0, NULL, NULL, instance, NULL);
 }
 
 BOOL addTrayIcon(HWND windowHandle, HICON icon)
@@ -211,7 +211,7 @@ BOOL addTrayIcon(HWND windowHandle, HICON icon)
 	iconData.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
 	iconData.uCallbackMessage = LWM_TRAY_EVENT;
 	iconData.hIcon = icon;
-	lstrcpyW(iconData.szTip, L"LightWM");
+	lstrcpyW(iconData.szTip, L"SnapWM");
 
 	return Shell_NotifyIconW(NIM_ADD, &iconData);
 }
@@ -235,7 +235,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, PWSTR cmdLine, i
 	HMODULE wmDll = NULL;
 	HHOOK hookShellProcHandle = NULL;
 
-	HANDLE currentlyRunningMutex = CreateMutexW(NULL, TRUE, L"Global\\LightWMIsCurrentlyRunning");
+	HANDLE currentlyRunningMutex = CreateMutexW(NULL, TRUE, L"Global\\SnapWMIsCurrentlyRunning");
 
 	if (currentlyRunningMutex == NULL)
 	{
@@ -244,7 +244,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, PWSTR cmdLine, i
 	}
 	else if (GetLastError() == ERROR_ALREADY_EXISTS)
 	{
-		reportGeneralError(L"LightWM is already running, exiting");
+		reportGeneralError(L"SnapWM is already running, exiting");
 		goto cleanup;
 	}
 
@@ -282,11 +282,11 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, PWSTR cmdLine, i
 		goto cleanup;
 	}
 
-	wmDll = LoadLibraryW(L"lightwm_dll");
+	wmDll = LoadLibraryW(L"snapwm");
 
 	if (wmDll == NULL)
 	{
-		reportWin32Error(L"LoadLibrary of lightwm_dll");
+		reportWin32Error(L"LoadLibrary of snapwm");
 		goto cleanup;
 	}
 
@@ -317,7 +317,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, PWSTR cmdLine, i
 		case WM_HOTKEY:
 #ifdef DEBUG
 			WCHAR message[128];
-			wsprintfW(message, L"LightWM hotkey message id=%lu lparam=0x%p\n", msg.wParam, msg.lParam);
+			wsprintfW(message, L"SnapWM hotkey message id=%lu lparam=0x%p\n", msg.wParam, msg.lParam);
 			OutputDebugStringW(message);
 #endif
 

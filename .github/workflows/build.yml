@@ -21,4 +21,4 @@ jobs:
         run: cmake --build build --config Release
 
       - name: Create Release
-        run: gh release create ${{ github.event.inputs.version }} ./release/lightwm.exe ./release/lightwm_dll.dll -n "Version ${{ github.event.inputs.version }}"
+        run: gh release create ${{ github.event.inputs.version }} ./release/snapwm.exe ./release/snapwm.dll -n "Version ${{ github.event.inputs.version }}"

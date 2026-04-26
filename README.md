@@ -1,135 +1,47 @@
-# LightWM
+# SnapWM
 
-### Minimalist Tiling Window Manager for Microsoft Windows
+SnapWM is a small tiling window manager for Windows, built in C on top of the Win32 API.
 
-Written with C and Windows API and utilizes existing Windows facilities, resulting in very slim code.
+It is designed for ultra-wide monitors: one focused window is centered at 60% width, while the remaining windows tile evenly on the left and right sides. It runs in the background and exposes the same actions through hotkeys and a system tray menu.
 
-Executable and DLL are very small (<20KB total)
+Inspired by the original [LightWM](https://github.com/nir9/lightwm) by nir9.
 
-Make sure you place the DLL next to the executable, so it can find it.
+## Keybindings
 
-Video in which I make the PoC of this project: https://youtu.be/cuPirXZ6AWo
+- `alt+q` - quit SnapWM
+- `alt+j` - focus next window
+- `alt+k` - focus previous window
+- `alt+f` - toggle fullscreen for the focused window
+- `alt+t` - retile and center the currently focused window
+- `alt+shift+t` - retile including minimized windows
+- `alt+p` - pause or resume automatic tiling
 
-## Usage
+SnapWM also adds a system tray icon. Right-click it to tile, focus windows, toggle fullscreen, pause tiling, or exit.
 
-After building, run the executable ```lightwm.exe``` which will reside in the release and/or debug folder, depending on what you built.
+## Features
 
-Upon running, it will immediately tile all the non-minimized windows on your screen. The focused window is centered at 60% of the monitor width, and the remaining windows are tiled evenly on the left and right sides. The program will run in the background.
+- Center-focused ultra-wide layout with evenly tiled side windows.
+- Sticky center window: focus changes do not reshuffle the layout unless you press `alt+t`.
+- Pixel-aligned placement using DWM extended frame bounds, so visible window chrome lines up with the tile grid.
+- Black DWM borders and square-corner preference for tiled windows.
+- Filters minimized, cloaked, tool, owned helper, and overlay-style windows so surfaces like input panels or Overwolf helpers do not consume tile slots.
+- Skips windows that Windows refuses to move, then recalculates the layout for the remaining windows.
+- Tray menu with mnemonic labels for all main actions.
+- No custom workspace model; SnapWM works with the currently visible native Windows desktop.
 
-If you want to configure it to run when you login, you can use the `Run` utility and type `shell:startup`, then create a LightWM shortcut in that folder.
+## Build
 
-### Hotkeys
-
-- ```alt+q``` - quit LightWM
-- ```alt+j``` - focus on next window
-- ```alt+k``` - focus on previous window
-- ```alt+f``` - toggle fullscreen mode (disables tiling and puts the focused window in fullscreen, pressing ```alt+f``` again will enable tiling again and tile all non-minimized windows)
-- You can "force" retile by using ```alt+t```. This centers the currently focused window.
-- You can force retile including minimized windows by using ```alt+shift+t```.
-- ```alt+p``` toggles whether the automatic tiling is enabled/disabled. This is useful if you also use programs which don't play well with LightWM automatic tiling
-
-LightWM also adds a system tray icon. Right-click it to access the same actions from a menu, including tiling, focus navigation, fullscreen, toggling automatic tiling, and exiting.
-
-## Building
-
-This project now uses CMake.
-
-You can build it from the "x64 Native Tools Command Prompt for VS 2022" that comes with Microsoft Visual Studio Build Tools:
+Build from a Visual Studio 2022 developer shell:
 
 ```powershell
 cmake -S . -B build -G "Visual Studio 17 2022" -A x64
 cmake --build build --config Release
 ```
 
-For a debug build, replace `Release` with `Debug`.
+Use `Debug` instead of `Release` for debug logging.
 
-The resulting `lightwm.exe` and `lightwm_dll.dll` are written to the `release` or `debug` folder, depending on the selected configuration.
+The binaries are written to `release` or `debug`. Keep `snapwm.dll` next to `snapwm.exe` when running.
 
-## Contributing
+## Startup
 
-One of my main goals with this project is to keep it as minimal as possible, for example I decided against using a dynamic configuration on purpose.
-
-Thus, make sure to keep the contributions as simple as possible.
-
-If you plan on adding a completely new feature, let's discuss it on the issues beforehand.
-
-Also notice that this project does not use any C library functions on purpose, only Windows API. This keeps everything as minimal as possible.
-
-## Coding Conventions
-
-#### Spacing
-
-Tabs > Spaces
-
-#### Function and variable names
-
-Functions and variables should be in camelCase
-
-#### Comments
-
-In general comments should be avoided unless they are absolutely necessary
-
-Avoid adding obvious comments on the code like:
-```c
-// Prints hello on the screen
-printf("Hello!\n");
-```
-
-Avoid comments explaining the logic in other words:
-```c
-// Allocate memory for the string and for the null terminator
-malloc(1024 + 1);
-```
-
-Instead something like this is much better:
-```c
-const int nullTermSize = 1;
-malloc(strlen(path) + nullTermSize);
-```
-
-Example of when a comment is necessary and has added value:
-```c
-// This DLL is loaded into many processes on the computer, therefore we need to keep the logic here as simple as possible to avoid slowing down the system
-```
-
-#### Pointers
-
-```int*``` and not ```int *```
-
-#### for/while/switch/if blocks
-
-Opening braces ```{``` in the same line as the block definition
-
-```c
-if (cond) {
-}
-```
-
-and not:
-
-```c
-if (cond)
-{
-}
-```
-
-Space between the block name and the brackets
-
-```if (statement)``` and not ```if(statement)```
-
-#### Function blocks
-
-Opening braces ```{``` in a new line after the function definition
-
-```c
-void init()
-{
-}
-```
-
-and not:
-
-```c
-void init() {
-}
-```
+Run `snapwm.exe`. To start it on login, open `shell:startup` and place a shortcut there.

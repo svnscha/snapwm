@@ -74,7 +74,7 @@ void debugLogSkippedWindow(HWND windowHandle, WCHAR *reason)
 	GetClassNameW(windowHandle, className, WINDOW_TEXT_BUFFER_LENGTH);
 	GetWindowTextW(windowHandle, caption, WINDOW_TEXT_BUFFER_LENGTH);
 
-	wsprintfW(message, L"LightWM skip reason=%s hwnd=%p class=\"%s\" caption=\"%s\" visible=%d iconic=%d\n", reason, windowHandle, className, caption, IsWindowVisible(windowHandle), IsIconic(windowHandle));
+	wsprintfW(message, L"SnapWM skip reason=%s hwnd=%p class=\"%s\" caption=\"%s\" visible=%d iconic=%d\n", reason, windowHandle, className, caption, IsWindowVisible(windowHandle), IsIconic(windowHandle));
 	OutputDebugStringW(message);
 }
 #endif
@@ -301,7 +301,7 @@ void debugLogWindowPlacement(HWND windowHandle, WCHAR *slot, int x, int y, int w
 		actualHeight = actualRect.bottom - actualRect.top;
 	}
 
-	wsprintfW(message, L"LightWM tile slot=%s hwnd=%p class=\"%s\" caption=\"%s\" wantedFrame=(%d,%d %dx%d) actualFrame=(%d,%d %dx%d) moved=%d error=%lu visible=%d iconic=%d\n", slot, windowHandle, className, caption, x, y, width, height, actualX, actualY, actualWidth, actualHeight, didMove, lastError, IsWindowVisible(windowHandle), IsIconic(windowHandle));
+	wsprintfW(message, L"SnapWM tile slot=%s hwnd=%p class=\"%s\" caption=\"%s\" wantedFrame=(%d,%d %dx%d) actualFrame=(%d,%d %dx%d) moved=%d error=%lu visible=%d iconic=%d\n", slot, windowHandle, className, caption, x, y, width, height, actualX, actualY, actualWidth, actualHeight, didMove, lastError, IsWindowVisible(windowHandle), IsIconic(windowHandle));
 	OutputDebugStringW(message);
 }
 #endif

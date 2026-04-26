@@ -31,7 +31,7 @@ bool addKeyboardKeybind(int id, char key, UINT modifiers)
 
 #ifdef DEBUG
 	WCHAR message[256];
-	wsprintfW(message, L"LightWM hotkey register id=%d key=%C vk=0x%02x modifiers=0x%04x registered=%d error=%lu\n", id, key, keyCode, modifiers, didRegister, lastError);
+	wsprintfW(message, L"SnapWM hotkey register id=%d key=%C vk=0x%02x modifiers=0x%04x registered=%d error=%lu\n", id, key, keyCode, modifiers, didRegister, lastError);
 	OutputDebugStringW(message);
 #endif
 
@@ -74,7 +74,7 @@ void handleHotkey(WPARAM wparam, LPARAM lparam)
 {
 #ifdef DEBUG
 	WCHAR message[128];
-	wsprintfW(message, L"LightWM hotkey dispatch id=%lu lparam=0x%p\n", wparam, lparam);
+	wsprintfW(message, L"SnapWM hotkey dispatch id=%lu lparam=0x%p\n", wparam, lparam);
 	OutputDebugStringW(message);
 #endif
 
