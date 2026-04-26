@@ -22,14 +22,9 @@
 HICON trayIcon;
 HWND trayWindow;
 
-void clearMemory(void *memory, int size)
+void clearMemory(void *memory, SIZE_T size)
 {
-	BYTE *bytes = memory;
-
-	for (int i = 0; i < size; i++)
-	{
-		bytes[i] = 0;
-	}
+	SecureZeroMemory(memory, size);
 }
 
 HICON createTileIcon(HINSTANCE instance)
